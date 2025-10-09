@@ -5,6 +5,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -37,5 +38,14 @@ class AuthController extends Controller
         $input['agreeToPolicy'] = $user->agreeToPolicy;
         
         return response()->json($input, 201);
+    }
+
+    public function login(Request $request)
+    {
+        if (!Auth()->attempt($request->only('email', 'password'))) {
+            return response()->json(['error' => 'Invalid Createdetails'], 401);
+        }
+
+        return response()->json(['message' => 'Login successful'], 200);
     }
 }
