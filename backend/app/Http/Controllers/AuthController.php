@@ -15,7 +15,7 @@ class AuthController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|min:8|same:confirmed_password',
+            'password' => 'required|string|min:8|same:password_confirmation',
             'agreeToPolicy' => 'required|accepted',
         ]);
 
@@ -31,21 +31,58 @@ class AuthController extends Controller
             'agreeToPolicy' => $request->agreeToPolicy,
         ]);
 
-        $input['first_name'] = $user->first_name;
-        $input['last_name'] = $user->last_name;
-        $input['email'] = $user->email;
-        $input['password'] = $user->password;
-        $input['agreeToPolicy'] = $user->agreeToPolicy;
+        $token = $user->createToken('App')->plainTextToken;
         
-        return response()->json($input, 201);
+        return response()->json([
+            'message' => 'User registered successfully',
+            'token' => $token,
+            'user' => $user
+        ], 201);
     }
 
     public function login(Request $request)
     {
-        if (!Auth()->attempt($request->only('email', 'password'))) {
+        if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json(['error' => 'Invalid Createdetails'], 401);
         }
 
-        return response()->json(['message' => 'Login successful'], 200);
+        $user = Auth::user();
+        $token = $user->createToken('App')->plainTextToken;
+        
+        return response()->json(
+            [
+                'message' => 'User logged in successfully',
+                'token' => $token,
+                'user' => $user
+            ]
+        , 201);
+    }
+
+    public function profile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()], 422);
+        }
+
+        $user = Auth::user();
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+
+        if($request->password){
+            $user->password = Hash::make($request->password);
+        }
+        $user->save();
+
+        return response()->json([
+            'message' => 'Profile updated successfully',
+            'user' => $user
+        ], 200);
     }
 }

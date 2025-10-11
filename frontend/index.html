@@ -11,5 +11,10 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script src="src/assets/css/dist/js/app.js"></script>
+    <script>
+      if (window.lucide && window.lucide.createIcons) {
+        window.lucide.createIcons({ icons: window.lucide.icons });
+      }
+    </script>
   </body>
 </html>
