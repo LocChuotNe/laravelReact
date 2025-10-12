@@ -92,10 +92,10 @@ export default function UserForm({ user, mode, onSuccess, onCancel }: UserFormPr
       }
       
       if (mode === 'add') {
-        await createUser(token, submitData);
+        await createUser(submitData);
         alert("Tạo người dùng thành công!");
       } else if (mode === 'edit' && user?.id) {
-        await updateUser(token, user.id, submitData);
+        await updateUser(user.id, submitData);
         alert("Cập nhật người dùng thành công!");
       }
       

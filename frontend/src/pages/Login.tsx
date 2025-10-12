@@ -35,7 +35,7 @@ export default function Login() {
                 console.log("FULL LOGIN RESPONSE:", res);
                 console.log("Response data:", res.data);
 
-                // ✅ Laravel trả token ở res.data.token
+                // trả token ở res.data.token
                 const token = res.data?.token;
 
                 if (!token) {
@@ -43,7 +43,7 @@ export default function Login() {
                     throw new Error("Không nhận được token từ server");
                 }
 
-                // ✅ chỉ lưu 1 key duy nhất
+                // chỉ lưu 1 key duy nhất
                 localStorage.setItem("auth_token", token);
 
                 console.log("Token đã lưu:", token);

@@ -20,7 +20,7 @@ interface UserTableProps {
 }
 
 export default function UserTable({ users = [], searchTerm, onEdit, onDelete }: UserTableProps) {
-  console.log("📦 Rendered users:", users);
+  console.log("Rendered users:", users);
 
   const filteredUsers = (users || []).filter(user => {
     if (!searchTerm) return true;
@@ -34,76 +34,122 @@ export default function UserTable({ users = [], searchTerm, onEdit, onDelete }: 
   });
 
   return (
-    <div className="intro-y col-span-12 overflow-auto lg:overflow-visible">
-      <table className="table table-report -mt-2">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>AVATAR</th>
-            <th>HỌ & TÊN</th>
-            <th>EMAIL</th>
-            <th>PHONE</th>
-            <th>ADDRESS</th>
-            <th className="text-center">STATUS</th>
-            <th className="text-center">CREATED AT</th>
-            <th className="text-center">ACTIONS</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredUsers.length > 0 ? (
-            filteredUsers.map(user => (
-              <tr key={user.id} className="intro-x">
-                <td>{user.id}</td>
-                <td>
-                  <div className="flex items-center justify-center">
+    <div className="intro-y col-span-12">
+      <div className="hidden xl:block overflow-x-auto">
+        <table className="table-auto w-full -mt-2 min-w-max">
+          <thead>
+            <tr className="bg-slate-50 border-b">
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-700 uppercase">ID</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-700 uppercase">AVATAR</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-700 uppercase">HỌ & TÊN</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-700 uppercase">EMAIL</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-700 uppercase">PHONE</th>
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-700 uppercase">ADDRESS</th>
+              <th className="px-3 py-3 text-center text-xs font-semibold text-slate-700 uppercase">STATUS</th>
+              <th className="px-3 py-3 text-center text-xs font-semibold text-slate-700 uppercase">CREATED AT</th>
+              <th className="px-3 py-3 text-center text-xs font-semibold text-slate-700 uppercase">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white">
+            {filteredUsers.length > 0 ? (
+              filteredUsers.map(user => (
+                <tr key={user.id} className="border-b hover:bg-slate-50">
+                  <td className="px-3 py-3 text-sm">{user.id}</td>
+                  <td className="px-3 py-3">
                     <img
                       alt={user.first_name}
-                      className="rounded-full border w-10 h-10"
+                      className="rounded-full border w-10 h-10 object-cover"
                       src={user.avatar || "/default-avatar.png"}
                     />
-                  </div>
-                </td>
-                <td>{`${user.first_name} ${user.last_name}`}</td>
-                <td>{user.email}</td>
-                <td>{user.phone || "-"}</td>
-                <td className="max-w-xs truncate">{user.address || "-"}</td>
-                <td className="w-40 text-center">
-                  {user.status === "active" ? (
-                    <div className="flex items-center justify-center text-green-600 font-medium">
-                      <CheckSquare className="w-4 h-4 mr-2" />
-                      <span>Active</span>
+                  </td>
+                  <td className="px-3 py-3 text-sm font-medium whitespace-nowrap">{`${user.first_name} ${user.last_name}`}</td>
+                  <td className="px-3 py-3 text-sm">{user.email}</td>
+                  <td className="px-3 py-3 text-sm">{user.phone || "-"}</td>
+                  <td className="px-3 py-3 text-sm max-w-xs truncate">{user.address || "-"}</td>
+                  <td className="px-3 py-3 text-center">
+                    {user.status === "active" ? (
+                      <span className="inline-flex items-center text-green-600 text-sm font-medium">
+                        <CheckSquare className="w-4 h-4 mr-1" />
+                        Active
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center text-red-600 text-sm font-medium">
+                        <XSquare className="w-4 h-4 mr-1" />
+                        Inactive
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-3 py-3 text-sm text-center whitespace-nowrap">
+                    {new Date(user.created_at).toLocaleDateString("vi-VN")}
+                  </td>
+                  <td className="px-3 py-3">
+                    <div className="flex justify-center items-center gap-2">
+                      <button 
+                        onClick={() => onEdit(user)} 
+                        className="text-blue-600 hover:text-blue-800 flex items-center text-sm"
+                      >
+                        <Edit3 className="w-4 h-4 mr-1" /> Edit
+                      </button>
+                      <button 
+                        onClick={() => onDelete(user)} 
+                        className="text-red-600 hover:text-red-800 flex items-center text-sm"
+                      >
+                        <Trash2 className="w-4 h-4 mr-1" /> Delete
+                      </button>
                     </div>
-                  ) : (
-                    <div className="flex items-center justify-center text-red-600 font-medium">
-                      <XSquare className="w-4 h-4 mr-2" />
-                      <span>Inactive</span>
-                    </div>
-                  )}
-                </td>
-                <td className="text-center">
-                  {new Date(user.created_at).toLocaleDateString("vi-VN")}
-                </td>
-                <td className="table-report__action w-56 text-center">
-                  <div className="flex justify-center items-center">
-                    <button onClick={() => onEdit(user)} className="text-blue-600 hover:underline flex items-center mr-3">
-                      <Edit3 className="w-4 h-4 mr-1" /> Edit
-                    </button>
-                    <button onClick={() => onDelete(user)} className="text-red-600 hover:underline flex items-center">
-                      <Trash2 className="w-4 h-4 mr-1" /> Delete
-                    </button>
-                  </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={9} className="px-3 py-8 text-center text-slate-500">
+                  {searchTerm ? "Không tìm thấy người dùng phù hợp" : "Không có người dùng nào"}
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={9} className="text-center text-slate-500 py-4">
-                {searchTerm ? "Không tìm thấy người dùng phù hợp" : "Không có người dùng nào"}
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="xl:hidden">
+        {filteredUsers.length > 0 ? (
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            {filteredUsers.map((user, index) => (
+              <div 
+                key={user.id} 
+                className={`flex items-center px-4 py-3 ${index !== filteredUsers.length - 1 ? 'border-b' : ''}`}
+              >
+                <div className="flex-1 min-w-0 mr-3">
+                  <h3 className="font-semibold text-slate-800 text-sm truncate">
+                    {`${user.first_name} ${user.last_name}`}
+                  </h3>
+                  <p className="text-xs text-slate-500 truncate">{user.email}</p>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <button 
+                    onClick={() => onEdit(user)} 
+                    className="text-blue-600 hover:text-blue-800 p-2 hover:bg-blue-50 rounded transition-colors"
+                    aria-label="Edit user"
+                  >
+                    <Edit3 className="w-5 h-5" />
+                  </button>
+                  <button 
+                    onClick={() => onDelete(user)} 
+                    className="text-red-600 hover:text-red-800 p-2 hover:bg-red-50 rounded transition-colors"
+                    aria-label="Delete user"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white rounded-lg shadow p-8 text-center text-slate-500">
+            {searchTerm ? "Không tìm thấy người dùng phù hợp" : "Không có người dùng nào"}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
