@@ -4,7 +4,6 @@ import { getUsers } from "../../services/authService";
 import UserTable from "./UserTable";
 import UserForm from "./UserForm";
 import DeleteConfirmation from "./DeleteConfirmation";
-
 interface UserData {
   id: number;
   first_name: string;
@@ -42,7 +41,7 @@ export default function User() {
       }
 
       const response = await getUsers(token);
-      console.log("✅ API Response:", response.data);
+      console.log("API Response:", response.data);
 
       const apiData = response.data?.data;
       if (Array.isArray(apiData)) {
@@ -53,7 +52,7 @@ export default function User() {
         setUsers([]);
       }
     } catch (err: any) {
-      console.error("❌ Fetch users error:", err);
+      console.error("Fetch users error:", err);
       setError(err.response?.data?.message || "Không thể tải danh sách người dùng");
     } finally {
       setLoading(false);

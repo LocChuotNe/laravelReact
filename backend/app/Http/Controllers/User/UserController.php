@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    /**
-     * Hiển thị danh sách tất cả người dùng
-     */
     public function index(Request $request)
     {
         try {
@@ -42,9 +39,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Hiển thị thông tin chi tiết một người dùng
-     */
     public function show($id)
     {
         try {
@@ -62,9 +56,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Tạo người dùng mới
-     */
     public function store(Request $request)
     {
         try {
@@ -107,9 +98,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Cập nhật thông tin người dùng
-     */
     public function update(Request $request, $id)
     {
         try {
@@ -132,7 +120,6 @@ class UserController extends Controller
                 ], 422);
             }
 
-            // Cập nhật các trường
             if ($request->has('first_name')) $user->first_name = $request->first_name;
             if ($request->has('last_name')) $user->last_name = $request->last_name;
             if ($request->has('email')) $user->email = $request->email;
@@ -155,15 +142,11 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Xóa người dùng
-     */
     public function destroy($id)
     {
         try {
             $user = User::findOrFail($id);
 
-            // Không cho phép xóa chính mình
             if (auth()->id() === $user->id) {
                 return response()->json([
                     'message' => 'Không thể xóa tài khoản của chính bạn',

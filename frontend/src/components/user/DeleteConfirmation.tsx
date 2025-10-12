@@ -28,7 +28,7 @@ export default function DeleteConfirmation({ user, onSuccess, onCancel }: Delete
     }
 
     try {
-      await deleteUser(token, user.id);
+      await deleteUser(user.id);
       alert("Xóa người dùng thành công!");
       onSuccess();
     } catch (error: any) {

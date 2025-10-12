@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { User, Activity, ChevronDown } from "lucide-react";
 
 interface SideNavProps {
   activeMenu: string;
@@ -6,16 +7,36 @@ interface SideNavProps {
 }
 
 export default function SideNav({ activeMenu, setActiveMenu }: SideNavProps) {
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(true);
   
   const handleMenuClick = (e: React.MouseEvent<HTMLAnchorElement>, menuName: string) => {
     e.preventDefault();
     setActiveMenu(menuName);
-    // Optional: Update URL without reload
     window.history.pushState({}, '', `/dashboard?tab=${menuName}`);
+  };
+
+  const toggleUserMenu = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setIsUserMenuOpen(!isUserMenuOpen);
   };
 
   return (
     <>
+      <style>{`
+        .submenu-container {
+          overflow: hidden;
+          transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .submenu-open {
+          max-height: 500px;
+          opacity: 1;
+        }
+        .submenu-closed {
+          max-height: 0;
+          opacity: 0;
+        }
+      `}</style>
+      
       <a 
         href="#" 
         className="intro-x flex items-center pl-5 pt-4"
@@ -36,45 +57,51 @@ export default function SideNav({ activeMenu, setActiveMenu }: SideNavProps) {
 
       <ul>
         <li>
-          <a href="#" className="side-menu side-menu--active">
+          <a 
+            href="#" 
+            className={`side-menu ${isUserMenuOpen ? 'side-menu--active side-menu--open' : 'side-menu--active'}`}
+            onClick={toggleUserMenu}
+          >
             <div className="side-menu__icon">
-              <i data-lucide="home"></i>
+              <User className="w-6 h-6 mr-2" />
             </div>
             <div className="side-menu__title">
               Quản Lý User
-              <div className="side-menu__sub-icon transform rotate-180">
-                <i data-lucide="chevron-down"></i>
+              <div className={`side-menu__sub-icon transition-transform duration-300 ${isUserMenuOpen ? 'rotate-180' : ''}`}>
+                <ChevronDown className="w-6 h-6 mr-2" />
               </div>
             </div>
           </a>
 
-          <ul className="side-menu__sub-open">
-            <li>
-              <a
-                href="#"
-                onClick={(e) => handleMenuClick(e, "user-group")}
-                className={`side-menu ${activeMenu === "user-group" ? "side-menu--active" : ""}`}
-              >
-                <div className="side-menu__icon">
-                  <i data-lucide="activity"></i>
-                </div>
-                <div className="side-menu__title"> Quản Lý Nhóm User</div>
-              </a>
-            </li>
+          <div className={`submenu-container ${isUserMenuOpen ? 'submenu-open' : 'submenu-closed'}`}>
+            <ul className="side-menu__sub-open">
+              <li>
+                <a
+                  href="#"
+                  onClick={(e) => handleMenuClick(e, "user-group")}
+                  className={`side-menu ${activeMenu === "user-group" ? "side-menu--active" : ""}`}
+                >
+                  <div className="side-menu__icon">
+                    <Activity className="w-6 h-6 mr-2" />
+                  </div>
+                  <div className="side-menu__title"> Quản Lý Nhóm User</div>
+                </a>
+              </li>
 
-            <li>
-              <a
-                href="#"
-                onClick={(e) => handleMenuClick(e, "users")}
-                className={`side-menu ${activeMenu === "users" ? "side-menu--active" : ""}`}
-              >
-                <div className="side-menu__icon">
-                  <i data-lucide="activity"></i>
-                </div>
-                <div className="side-menu__title"> Quản Lý User </div>
-              </a>
-            </li>
-          </ul>
+              <li>
+                <a
+                  href="#"
+                  onClick={(e) => handleMenuClick(e, "users")}
+                  className={`side-menu ${activeMenu === "users" ? "side-menu--active" : ""}`}
+                >
+                  <div className="side-menu__icon">
+                    <Activity className="w-6 h-6 mr-2" />
+                  </div>
+                  <div className="side-menu__title"> Quản Lý User </div>
+                </a>
+              </li>
+            </ul>
+          </div>
         </li>
       </ul>
     </>

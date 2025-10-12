@@ -50,7 +50,7 @@ export default function Index() {
       {/* Main content */}
       <div className="content flex-1 bg-gray-50 min-h-screen">
         {/* Header top bar */}
-        <div className="top-bar p-4 bg-white shadow flex items-center justify-between">
+        <div className="top-bar flex items-center justify-between">
           <h1 className="text-lg font-semibold text-gray-800">
             {getPageTitle()}
           </h1>
