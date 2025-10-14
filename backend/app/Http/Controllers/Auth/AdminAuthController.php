@@ -25,7 +25,7 @@ class AdminAuthController extends Controller
             return response()->json(['error' => $result['error']], $result['status']);
         }
 
-        if ($result['user']->role->name !== 'admin') {
+        if (!$result['user']->role || $result['user']->role->name !== 'admin') {
             return response()->json(['error' => 'Không có quyền truy cập'], 403);
         }
 

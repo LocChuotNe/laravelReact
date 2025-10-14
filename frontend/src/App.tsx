@@ -1,16 +1,14 @@
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
-import Register from './pages/Register.tsx'
-import Dashboard from './pages/Dashboard.tsx'
-import Login from './pages/Login.tsx'
+import Dashboard from './modules/admin/pages/Dashboard.tsx'
+import Login from './modules/admin/pages/AdminLogin.tsx'
 
 function App() {
 
   return (
     <>
       <Routes>
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </>
