@@ -17,11 +17,23 @@ class RoleMiddleware
     {
         $user = $request->user();
 
-        if (!$user || !$user->role || $user->role->name !== $role) {
+        // Nếu user chưa đăng nhập hoặc không có role
+        if (!$user || !isset($user->role)) {
+            return response()->json(['error' => 'Không có quyền truy cập'], 403);
+        }
+
+        // Nếu role là quan hệ Eloquent (object)
+        if (is_object($user->role) && isset($user->role->name)) {
+            if ($user->role->name !== $role) {
+                return response()->json(['error' => 'Không có quyền truy cập'], 403);
+            }
+        }
+
+        // Nếu role là string (ví dụ: 'admin', 'user')
+        if (is_string($user->role) && $user->role !== $role) {
             return response()->json(['error' => 'Không có quyền truy cập'], 403);
         }
 
         return $next($request);
     }
-
 }
