@@ -3,8 +3,7 @@ import { createUser, updateUser } from "../../services/authService";
 
 interface UserData {
   id?: number;
-  first_name: string;
-  last_name: string;
+  fullname: string;
   email: string;
   phone?: string;
   address?: string;
@@ -20,8 +19,7 @@ interface UserFormProps {
 
 export default function UserForm({ user, mode, onSuccess, onCancel }: UserFormProps) {
   const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
+    fullname: '',
     email: '',
     password: '',
     phone: '',
@@ -34,8 +32,7 @@ export default function UserForm({ user, mode, onSuccess, onCancel }: UserFormPr
   useEffect(() => {
     if (mode === 'edit' && user) {
       setFormData({
-        first_name: user.first_name || '',
-        last_name: user.last_name || '',
+        fullname: user.fullname || '',
         email: user.email || '',
         password: '',
         phone: user.phone || '',
@@ -56,8 +53,7 @@ export default function UserForm({ user, mode, onSuccess, onCancel }: UserFormPr
   const validate = () => {
     const newErrors: any = {};
     
-    if (!formData.first_name.trim()) newErrors.first_name = 'Vui lòng nhập họ';
-    if (!formData.last_name.trim()) newErrors.last_name = 'Vui lòng nhập tên';
+    if (!formData.fullname.trim()) newErrors.fullname = 'Vui lòng nhập tên';
     if (!formData.email.trim()) newErrors.email = 'Vui lòng nhập email';
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email không hợp lệ';
     
@@ -136,15 +132,15 @@ export default function UserForm({ user, mode, onSuccess, onCancel }: UserFormPr
               </label>
               <input 
                 type="text" 
-                name="first_name"
-                className={`form-control ${errors.first_name ? 'border-red-500' : ''}`}
+                name="fullname"
+                className={`form-control ${errors.fullname ? 'border-red-500' : ''}`}
                 placeholder="Nhập họ..." 
-                value={formData.first_name}
+                value={formData.fullname}
                 onChange={handleChange}
                 disabled={loading}
               />
-              {errors.first_name && (
-                <p className="text-red-500 text-xs mt-1">{errors.first_name}</p>
+              {errors.fullname && (
+                <p className="text-red-500 text-xs mt-1">{errors.fullname}</p>
               )}
             </div>
             

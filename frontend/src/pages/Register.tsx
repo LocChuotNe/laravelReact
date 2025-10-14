@@ -41,8 +41,7 @@ export default function Register() {
         setError([]);
 
         register({
-            first_name: formData.firstName,
-            last_name: formData.lastName,
+            fullname: formData.firstName,
             email: formData.email,
             password: formData.password,
             password_confirmation: formData.passwordConfirmation,

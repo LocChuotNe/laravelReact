@@ -4,8 +4,7 @@ import { deleteUser } from "../../services/authService";
 
 interface UserData {
   id: number;
-  first_name: string;
-  last_name: string;
+  fullname: string;
 }
 
 interface DeleteConfirmationProps {
@@ -53,7 +52,7 @@ export default function DeleteConfirmation({ user, onSuccess, onCancel }: Delete
           
           <p className="text-sm text-gray-500 mb-6">
             Bạn có chắc chắn muốn xóa người dùng{' '}
-            <strong>{user.first_name} {user.last_name}</strong>?
+            <strong>{user.fullname}</strong>?
             <br />
             <span className="text-red-500">Hành động này không thể hoàn tác.</span>
           </p>
