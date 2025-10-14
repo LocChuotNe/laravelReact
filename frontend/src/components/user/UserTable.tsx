@@ -2,8 +2,7 @@ import { CheckSquare, XSquare, Edit3, Trash2 } from "lucide-react";
 
 interface UserData {
   id: number;
-  first_name: string;
-  last_name: string;
+  fullname: string;
   email: string;
   phone?: string;
   address?: string;
@@ -26,8 +25,7 @@ export default function UserTable({ users = [], searchTerm, onEdit, onDelete }: 
     if (!searchTerm) return true;
     const searchLower = searchTerm.toLowerCase();
     return (
-      user.first_name?.toLowerCase().includes(searchLower) ||
-      user.last_name?.toLowerCase().includes(searchLower) ||
+      user.fullname?.toLowerCase().includes(searchLower) ||
       user.email?.toLowerCase().includes(searchLower) ||
       user.phone?.toLowerCase().includes(searchLower)
     );
@@ -57,12 +55,12 @@ export default function UserTable({ users = [], searchTerm, onEdit, onDelete }: 
                   <td className="px-3 py-3 text-sm">{user.id}</td>
                   <td className="px-3 py-3">
                     <img
-                      alt={user.first_name}
+                      alt={user.fullname}
                       className="rounded-full border w-10 h-10 object-cover"
                       src={user.avatar || "/default-avatar.png"}
                     />
                   </td>
-                  <td className="px-3 py-3 text-sm font-medium whitespace-nowrap">{`${user.first_name} ${user.last_name}`}</td>
+                  <td className="px-3 py-3 text-sm font-medium whitespace-nowrap">{`${user.fullname}`}</td>
                   <td className="px-3 py-3 text-sm">{user.email}</td>
                   <td className="px-3 py-3 text-sm">{user.phone || "-"}</td>
                   <td className="px-3 py-3 text-sm max-w-xs truncate">{user.address || "-"}</td>
@@ -121,7 +119,7 @@ export default function UserTable({ users = [], searchTerm, onEdit, onDelete }: 
               >
                 <div className="flex-1 min-w-0 mr-3">
                   <h3 className="font-semibold text-slate-800 text-sm truncate">
-                    {`${user.first_name} ${user.last_name}`}
+                    {`${user.fullname}`}
                   </h3>
                   <p className="text-xs text-slate-500 truncate">{user.email}</p>
                 </div>

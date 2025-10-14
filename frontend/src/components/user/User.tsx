@@ -6,8 +6,7 @@ import UserForm from "./UserForm";
 import DeleteConfirmation from "./DeleteConfirmation";
 interface UserData {
   id: number;
-  first_name: string;
-  last_name: string;
+  fullname: string;
   email: string;
   phone?: string;
   address?: string;

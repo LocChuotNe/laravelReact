@@ -32,7 +32,7 @@ class ShareErrorsFromSession
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $role)
     {
         // If the current session has an "errors" variable bound to it, we will share
         // its value with all view instances so the views can easily access errors
