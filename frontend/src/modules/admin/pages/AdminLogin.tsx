@@ -21,7 +21,9 @@ export default function AdminLogin() {
       localStorage.setItem("auth_role", "admin");
       navigate("/admin");
     } catch (err: any) {
-      setErrors(["Email hoặc mật khẩu không đúng"]);
+      const res = await err.response?.json?.();
+      const message = res?.error || "Đăng nhập thất bại";
+      setErrors([message]);
     }
   };
 

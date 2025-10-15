@@ -1,5 +1,21 @@
+export const verifyAdmin = async () => {
+  const res = await fetch("http://127.0.0.1:8000/api/admin/me", {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+      Accept: "application/json",
+    },
+  });
+
+  if (!res.ok) throw new Error("Unauthorized");
+
+  const data = await res.json();
+  if (data.role !== "admin") throw new Error("Không có quyền admin");
+
+  return data;
+};
+
 export const loginAdmin = async (payload: { email: string; password: string }) => {
-  const res = await fetch("http://localhost:8000/api/admin/login", {
+  const res = await fetch("http://127.0.0.1:8000/api/admin/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -8,12 +24,15 @@ export const loginAdmin = async (payload: { email: string; password: string }) =
     body: JSON.stringify(payload),
   });
 
-  if (!res.ok) throw new Error("Đăng nhập thất bại");
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(data.error || "Đăng nhập thất bại");
+  }
   return await res.json();
 };
 
 export const logoutAdmin = async () => {
-  const res = await fetch('http://localhost:8000/api/admin/logout', {
+  const res = await fetch('http://127.0.0.1:8000/api/admin/logout', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
@@ -26,7 +45,7 @@ export const logoutAdmin = async () => {
 };
 
 export const getAdminProfile = async () => {
-  const res = await fetch('http://localhost:8000/api/admin/dashboard', {
+  const res = await fetch('http://127.0.0.1:8000/api/admin/dashboard', {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
       Accept: 'application/json',
@@ -34,5 +53,30 @@ export const getAdminProfile = async () => {
   });
 
   if (!res.ok) throw new Error('Không lấy được thông tin admin');
+  return await res.json();
+};
+
+export const userListAdmin = async () => {
+  const res = await fetch("http://127.0.0.1:8000/api/admin/users", {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+      Accept: "application/json",
+    },
+  });
+
+  if (!res.ok) throw new Error("Không thể lấy danh sách người dùng");
+  return await res.json();
+};
+
+export const userDeleteAdmin = async (id: number) => {
+  const res = await fetch(`http://127.0.0.1:8000/api/admin/users/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+      Accept: "application/json",
+    },
+  });
+
+  if (!res.ok) throw new Error("Không thể xoá người dùng");
   return await res.json();
 };
