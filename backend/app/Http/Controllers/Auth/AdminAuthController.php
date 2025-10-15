@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class AdminAuthController extends Controller
 {
@@ -17,22 +18,30 @@ class AdminAuthController extends Controller
         $this->authService = $authService;
     }
 
+    public function me(Request $request)
+    {
+        $user = $request->user();
+
+        return response()->json([
+            'user' => $user,
+            'role' => $user->role->name ?? 'null || editor || viewer'
+        ]);
+    }
+
     public function login(LoginRequest $request): JsonResponse
     {
         $result = $this->authService->login($request->validated());
 
         if (isset($result['error'])) {
-            return response()->json(['error' => $result['error']], $result['status']);
-        }
-
-        if (!$result['user']->role || $result['user']->role->name !== 'admin') {
-            return response()->json(['error' => 'Không có quyền truy cập'], 403);
+            return response()->json([
+                'error' => $result['error']
+            ], $result['status']);
         }
 
         return response()->json([
             'message' => $result['message'],
             'user' => $result['user'],
-            'token' => $result['token'],
+            'token' => $result['token']
         ], $result['status']);
     }
 

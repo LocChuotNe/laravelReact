@@ -17,15 +17,32 @@ class AuthService
         return ['user' => $user, 'token' => $token];
     }
 
-    public function login(array $data): array
+    public function login(array $credentials): array
     {
-        if (!Auth::attempt($data)) {
-            return ['error' => 'Thông tin đăng nhập không đúng', 'status' => 401];
+        if (!Auth::attempt($credentials)) {
+            return [
+                'error' => 'Sai tài khoản hoặc mật khẩu',
+                'status' => 401
+            ];
         }
 
         $user = Auth::user();
-        $token = $user->createToken('App')->plainTextToken;
 
-        return ['message' => 'Đăng nhập thành công', 'user' => $user, 'token' => $token, 'status' => 200];
+        if (!$user->role || $user->role->name !== 'admin') {
+            return [
+                'error' => 'Không có quyền truy cập',
+                'status' => 403
+            ];
+        }
+
+        $token = $user->createToken('AdminToken')->plainTextToken;
+
+        return [
+            'message' => 'Đăng nhập thành công',
+            'user' => $user,
+            'token' => $token,
+            'status' => 200
+        ];
     }
+
 }

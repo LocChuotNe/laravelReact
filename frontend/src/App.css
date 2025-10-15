@@ -1,3 +1,19 @@
 .content:before{
     border: none !important;
 }
+.swal2-confirm.swal2-styled{
+    background-color: #fc9f8e;
+}
+.swal2-confirm.swal2-styled:hover{
+    background-color: #d33;
+    color: #fff;
+    transition: all ease-in-out 0.3s;
+}
+.swal2-cancel.swal2-styled{
+    background-color: #ddd;
+}
+.swal2-cancel.swal2-styled:hover{
+    background-color: #6d6d6d;
+    color: #fff;
+    transition: all ease-in-out 0.3s;
+}

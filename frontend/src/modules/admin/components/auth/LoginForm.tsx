@@ -31,8 +31,8 @@ export default function LoginForm({
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-5">
               <strong className="font-bold">⚠️ Error!</strong>
               <ul className="list-disc list-inside mt-2">
-                {errors.map((err, index) => (
-                  <li key={index}>{err}</li>
+               {errors.map((err, i) => (
+                  <li key={i}>{err}</li>
                 ))}
               </ul>
             </div>
