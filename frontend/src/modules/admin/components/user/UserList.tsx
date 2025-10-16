@@ -4,14 +4,16 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import 'sweetalert2/dist/sweetalert2.min.css';
 import { Trash2, CheckSquare, Search, Printer, FileText, Plus } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 export default function UserList() {
   const [users, setUsers] = useState([]);
 
   const fetchUsers = async () => {
     try {
-      const res = await userListAdmin();
-      setUsers(res.data);
+      const res = await userListAdmin()
+      const filteredUsers = res.data.filter((user) => user.role_id !== 1);
+      setUsers(filteredUsers);
     } catch {
       toast.error("Không thể tải danh sách người dùng");
     }
@@ -20,6 +22,11 @@ export default function UserList() {
   useEffect(() => {
     fetchUsers();
   }, []);
+  
+  const navigate = useNavigate();
+  const handleEdit = (id:Number) =>{
+    navigate(`/admin/user/edit/${id}`);
+  }
 
   const handleDelete = async (id: number) => {
     const result = await Swal.fire({
@@ -110,7 +117,11 @@ export default function UserList() {
                 </td>
                 <td className="table-report__action w-56">
                   <div className="flex justify-center items-center">
-                    <a className="flex items-center mr-3" href="#">
+                    <a 
+                      className="flex items-center mr-3" 
+                      href="#"
+                      onClick={()=>handleEdit(user.id)}
+                    >
                        <CheckSquare className="w-4 h-4 mr-1" /> Edit
                     </a>
                     <a

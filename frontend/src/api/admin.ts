@@ -68,6 +68,56 @@ export const userListAdmin = async () => {
   return await res.json();
 };
 
+export const userCreateAdmin = async (payload: any) => {
+  const res = await fetch("http://127.0.0.1:8000/api/admin/users", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(data.error || "Không thể tạo người dùng");
+  }
+
+  return await res.json();
+};
+
+export const getUserById = async (id: number | string) => {
+  const res = await fetch(`http://127.0.0.1:8000/api/admin/users/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+      Accept: "application/json",
+    },
+  });
+
+  if (!res.ok) throw new Error("Không thể lấy thông tin người dùng");
+  return await res.json();
+};
+
+export const updateUser = async (id: number | string, payload: any) => {
+  const res = await fetch(`http://127.0.0.1:8000/api/admin/users/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(data.error || "Không thể cập nhật người dùng");
+  }
+
+  return await res.json();
+};
+
 export const userDeleteAdmin = async (id: number) => {
   const res = await fetch(`http://127.0.0.1:8000/api/admin/users/${id}`, {
     method: "DELETE",
