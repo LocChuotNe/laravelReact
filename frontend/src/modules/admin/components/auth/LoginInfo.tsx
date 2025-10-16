@@ -1,4 +1,4 @@
-export default function RegisterInfo() {
+export default function LoginInfo() {
     return (
         <div className="hidden xl:flex flex-col min-h-screen">
             <a href="#" className="-intro-x flex items-center pt-5" onClick={(e) => e.preventDefault()}>

@@ -7,6 +7,7 @@ import BlockRoute from './modules/admin/components/common/BlockRoute.tsx'
 import Welcome from './modules/admin/pages/Welcome.tsx'
 import UserList from "./modules/admin/components/user/UserList.tsx";
 import UserGroups from "./modules/admin/components/user/UserGroups.tsx";
+import EditUser from "./modules/admin/components/user/EditUser.tsx";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
       >
         <Route index element={<Welcome />} />
         <Route path="users" element={<UserList />} />
+        <Route path="/admin/user/edit/:id" element={<EditUser  />} />
         <Route path="groups" element={<UserGroups />} />
       </Route>
     </Routes>

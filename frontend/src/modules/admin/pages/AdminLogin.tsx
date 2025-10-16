@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/auth/LoginForm";
 import { loginAdmin } from "../../../api/admin";
+import LoginInfo from "../../../modules/admin/components/auth/LoginInfo"
 
 export default function AdminLogin() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -35,6 +36,7 @@ export default function AdminLogin() {
     <div className="login">
       <div className="container sm:px-10">
         <div className="block xl:grid grid-cols-2 gap-4">
+          <LoginInfo />
           <LoginForm
             formData={formData}
             onInputChange={handleInputChange}

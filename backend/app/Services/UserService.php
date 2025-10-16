@@ -9,7 +9,7 @@ class UserService
 {
     public function getAll()
     {
-        return User::select('id', 'fullname', 'email', 'phone', 'address', 'status', 'created_at', 'updated_at')
+        return User::select('id', 'fullname', 'email', 'birthday', 'gender', 'role_id', 'phone', 'address', 'status', 'districts', 'cityid', 'avatar_url')
             ->orderBy('id', 'desc')
             ->get();
     }
