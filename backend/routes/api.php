@@ -17,7 +17,7 @@ Route::prefix('user')->group(function () {
 
 Route::prefix('admin')->group(function () {
     Route::post('login', [AdminAuthController::class, 'login']);
-    
+
     Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
         Route::get('/me', [AdminAuthController::class, 'me']);
         Route::get('dashboard', [AdminAuthController::class, 'profile']);
