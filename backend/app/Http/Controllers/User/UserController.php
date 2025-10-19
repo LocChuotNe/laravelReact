@@ -43,9 +43,21 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, $id): JsonResponse
     {
+        $currentUser = auth()->user();
+        $targetUser = $this->userService->find($id);
+        $newRoleId = $request->input('role_id');
+
+        if (!$this->userService->canUpdateRole($currentUser, $targetUser, $newRoleId)) {
+            return response()->json([
+                'message' => 'Bạn không có quyền cập nhật vai trò người dùng này',
+            ], 403);
+        }
+
+        $updatedUser = $this->userService->update($id, $request->validated());
+
         return response()->json([
             'message' => 'Cập nhật người dùng thành công',
-            'data' => $this->userService->update($id, $request->validated()),
+            'data' => $updatedUser,
         ]);
     }
 

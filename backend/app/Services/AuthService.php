@@ -28,7 +28,7 @@ class AuthService
 
         $user = Auth::user();
 
-        if (!$user->role || $user->role->name !== 'admin') {
+        if (!$user->role || !in_array($user->role->name, ['admin', 'editor'])) {
             return [
                 'error' => 'Không có quyền truy cập',
                 'status' => 403

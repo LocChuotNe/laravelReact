@@ -8,33 +8,38 @@ import Welcome from './modules/admin/pages/Welcome.tsx'
 import UserList from "./modules/admin/components/user/UserList.tsx";
 import UserGroups from "./modules/admin/components/user/UserGroups.tsx";
 import EditUser from "./modules/admin/components/user/EditUser.tsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    <Routes>
-      <Route
-        path="/login"
-        element={
-          <BlockRoute>
-            <Login />
-          </BlockRoute>
-        }
-      />
+    <>
+      <ToastContainer position="top-right" autoClose={3000} />
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            <BlockRoute>
+              <Login />
+            </BlockRoute>
+          }
+        />
 
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<Welcome />} />
-        <Route path="users" element={<UserList />} />
-        <Route path="/admin/user/edit/:id" element={<EditUser  />} />
-        <Route path="groups" element={<UserGroups />} />
-      </Route>
-    </Routes>
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="admin" element={<Welcome />} />
+          <Route path="users" element={<UserList />} />
+          <Route path="/admin/user/edit/:id" element={<EditUser />} />
+          <Route path="groups" element={<UserGroups />} />
+        </Route>
+      </Routes>
+    </>
   );
 }
 

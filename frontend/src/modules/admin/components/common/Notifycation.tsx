@@ -9,7 +9,6 @@ export default function Notifycation() {
     const fetchUsers = async () => {
         try {
         const res = await userListAdmin();
-        console.log("User data", users.map( u => ({ id: u.fullname})))
         const filteredUsers = res.data.filter((user) => user.role_id === 1); 
         setUsers(filteredUsers);
         } catch {

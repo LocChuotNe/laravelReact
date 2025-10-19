@@ -15,6 +15,16 @@ export default function EditUser() {
     { label: "Email", name: "email", type: "email" },
     { label: "Số điện thoại", name: "phone", type: "text" },
     {
+      label: "Quyền tài khoản",
+      name: "role_id",
+      type: "select",
+      options: [
+        { label: "Admin", value: "1" },
+        { label: "Editor", value: "2" },
+        { label: "Viewer", value: "3" },
+      ],
+    },
+    {
       label: "Trạng thái",
       name: "status",
       type: "select",
