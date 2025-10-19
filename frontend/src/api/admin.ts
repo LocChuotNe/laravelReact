@@ -9,7 +9,9 @@ export const verifyAdmin = async () => {
   if (!res.ok) throw new Error("Unauthorized");
 
   const data = await res.json();
-  if (data.role !== "admin") throw new Error("Không có quyền admin");
+  if (!["admin", "editor"].includes(data.role)) {
+    throw new Error("Không có quyền truy cập");
+  }
 
   return data;
 };

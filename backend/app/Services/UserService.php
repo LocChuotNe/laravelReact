@@ -9,8 +9,21 @@ class UserService
 {
     public function getAll()
     {
-        return User::select('id', 'fullname', 'email', 'birthday', 'gender', 'role_id', 'phone', 'address', 'status', 'districts', 'cityid', 'avatar_url')
-            ->orderBy('id', 'desc')
+        return User::select(
+            'users.id',
+            'users.fullname',
+            'users.email',
+            'users.birthday',
+            'users.gender',
+            'roles.name as role_name',
+            'users.phone',
+            'users.address',
+            'users.status',
+            'users.districts',
+            'users.cityid',
+            'users.avatar_url')
+            ->join('roles', 'users.role_id', '=', 'roles.id')
+            ->orderBy('users.id', 'desc')
             ->get();
     }
 
@@ -34,6 +47,7 @@ class UserService
         }
 
         $user->update($data);
+        $user->load('role');
         return $user;
     }
 
@@ -48,4 +62,33 @@ class UserService
         $user->delete();
         return ['message' => 'Xóa người dùng thành công', 'status' => 200];
     }
+
+    public function canUpdateRole(User $currentUser, User $targetUser, $newRoleId): bool
+    {
+        $currentRole = $currentUser->role->name;
+        $targetRole = $targetUser->role->name;
+        $newRole = \App\Models\Role::find($newRoleId)?->name;
+
+        // Editor không được thao tác với tài khoản admin
+        if ($currentUser->id === $targetUser->id) {
+            return false;
+        }
+
+        // Editor không được thao tác với tài khoản admin
+        if ($currentRole === 'editor' && $targetRole === 'admin') {
+            return false;
+        }
+
+        // Editor chỉ được cập nhật viewer → editor
+        if ($currentRole === 'editor') {
+            return in_array($targetRole, ['viewer', 'editor']) && in_array($newRole, ['viewer', 'editor']);
+        }
+
+        // Admin được cập nhật mọi thứ
+        if ($currentRole === 'admin') {
+            return in_array($targetRole, ['viewer', 'editor', 'admin']) && in_array($newRole, ['viewer', 'editor', 'admin']);
+        }
+
+        return false;
+}
 }

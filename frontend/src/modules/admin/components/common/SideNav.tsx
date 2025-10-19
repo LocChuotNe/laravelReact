@@ -38,13 +38,13 @@ export default function SideNav() {
               <li>
                 <NavLink to="/admin/groups" className="side-menu">
                   <div className="side-menu__icon"><i data-lucide="zap"></i></div>
-                  <div className="side-menu__title">Quản lý Nhóm User</div>
+                  <div className="side-menu__title">Quản lý Tài Khoản Admin</div>
                 </NavLink>
               </li>
               <li>
                 <NavLink to="/admin/users" className="side-menu">
                   <div className="side-menu__icon"><i data-lucide="zap"></i></div>
-                  <div className="side-menu__title">Quản lý User</div>
+                  <div className="side-menu__title">Quản lý Tài Khoản User</div>
                 </NavLink>
               </li>
             </ul>

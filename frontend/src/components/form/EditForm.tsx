@@ -1,21 +1,9 @@
-// src/modules/admin/components/form/EditForm.tsx
 import { useState, useEffect } from "react";
-
-type FieldConfig = {
-  label: string;
-  name: string;
-  type: string;
-  options?: { label: string; value: string }[];
-};
-
-type Props = {
-  initialData?: any;
-  onSubmit: (formData: any) => void;
-  fields: FieldConfig[];
-};
+import { toast } from "react-toastify";
 
 export default function EditForm({ initialData, onSubmit, fields }: Props) {
   const [formData, setFormData] = useState(initialData || {});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setFormData(initialData || {});
@@ -27,8 +15,16 @@ export default function EditForm({ initialData, onSubmit, fields }: Props) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    onSubmit(formData);
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      await onSubmit(formData);
+      toast.success("Cập nhật thành công!");
+    } catch (error: any) {
+      toast.error(error.message || "Có lỗi xảy ra khi cập nhật");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -65,8 +61,13 @@ export default function EditForm({ initialData, onSubmit, fields }: Props) {
         <button type="button" className="btn btn-outline-secondary mr-2">
           Huỷ
         </button>
-        <button type="button" className="btn btn-primary" onClick={handleSubmit}>
-          Lưu
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          {loading ? "Đang lưu..." : "Lưu"}
         </button>
       </div>
     </div>

@@ -12,7 +12,7 @@ export default function UserList() {
   const fetchUsers = async () => {
     try {
       const res = await userListAdmin()
-      const filteredUsers = res.data.filter((user) => user.role_id !== 1);
+      const filteredUsers = res.data.filter((user) => user.role_name !== 'admin');
       setUsers(filteredUsers);
     } catch {
       toast.error("Không thể tải danh sách người dùng");
@@ -87,6 +87,7 @@ export default function UserList() {
               <th className="whitespace-nowrap">FULL NAME</th>
               <th className="text-center whitespace-nowrap">PHONE</th>
               <th className="text-center whitespace-nowrap">EMAIL</th>
+              <th className="text-center whitespace-nowrap">ROLES</th>
               <th className="text-center whitespace-nowrap">STATUS</th>
               <th className="text-center whitespace-nowrap">ACTIONS</th>
             </tr>
@@ -109,6 +110,7 @@ export default function UserList() {
                 </td>
                 <td className="text-center">{user.phone || "—"}</td>
                 <td className="text-center">{user.email}</td>
+                <td className="text-center">{user.role_name}</td>
                 <td className="w-40">
                   <div className={`flex items-center justify-center ${user.status === "active" ? "text-success" : "text-danger"}`}>
                     <CheckSquare className="w-4 h-4 mr-2" />

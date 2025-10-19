@@ -17,3 +17,6 @@
     color: #fff;
     transition: all ease-in-out 0.3s;
 }
+.Toastify__toast-container {
+  z-index: 9999 !important;
+}

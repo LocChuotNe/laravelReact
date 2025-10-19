@@ -1,147 +1,165 @@
+import { useEffect, useState } from "react";
+import { userListAdmin, userDeleteAdmin } from "../../../../api/index";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import 'sweetalert2/dist/sweetalert2.min.css';
+import { Trash2, CheckSquare, Search, Printer, FileText, Plus } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
+
 export default function UserGroups() {
-    return (
-        <div className="intro-y box p-5">
-        {/* Product Name */}
-        <div>
-            <label htmlFor="crud-form-1" className="form-label">
-            Product Name
-            </label>
-            <input
-            id="crud-form-1"
-            type="text"
-            className="form-control w-full"
-            placeholder="Input text"
-            />
-        </div>
+  const [users, setUsers] = useState([]);
 
-        {/* Category */}
-        <div className="mt-3">
-            <label htmlFor="crud-form-2" className="form-label">
-            Category
-            </label>
-            <select
-            id="crud-form-2"
-            multiple
-            className="tom-select w-full"
-            defaultValue={["1", "3"]}
-            >
-            <option value="1">Sport & Outdoor</option>
-            <option value="2">PC & Laptop</option>
-            <option value="3">Smartphone & Tablet</option>
-            <option value="4">Photography</option>
-            </select>
-        </div>
+  const fetchUsers = async () => {
+    try {
+      const res = await userListAdmin()
+      const filteredUsers = res.data.filter((user) => user.role_name == 'admin');
+      setUsers(filteredUsers);
+    } catch {
+      toast.error("Không thể tải danh sách người dùng");
+    }
+  };
 
-        {/* Quantity */}
-        <div className="mt-3">
-            <label htmlFor="crud-form-3" className="form-label">
-            Quantity
-            </label>
-            <div className="input-group">
-            <input
-                id="crud-form-3"
-                type="text"
-                className="form-control"
-                placeholder="Quantity"
-                aria-describedby="input-group-1"
-            />
-            <div id="input-group-1" className="input-group-text">
-                pcs
-            </div>
-            </div>
-        </div>
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+  
+  const navigate = useNavigate();
+  const handleEdit = (id:Number) =>{
+    navigate(`/admin/user/edit/${id}`);
+  }
 
-        {/* Weight */}
-        <div className="mt-3">
-            <label htmlFor="crud-form-4" className="form-label">
-            Weight
-            </label>
-            <div className="input-group">
-            <input
-                id="crud-form-4"
-                type="text"
-                className="form-control"
-                placeholder="Weight"
-                aria-describedby="input-group-2"
-            />
-            <div id="input-group-2" className="input-group-text">
-                grams
-            </div>
-            </div>
-        </div>
+  const handleDelete = async (id: number) => {
+    const result = await Swal.fire({
+        title: "Bạn có chắc muốn xoá?",
+        text: "Hành động này không thể hoàn tác.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Xoá",
+        cancelButtonText: "Huỷ",
+    });
 
-        {/* Price */}
-        <div className="mt-3">
-            <label className="form-label">Price</label>
-            <div className="sm:grid grid-cols-3 gap-2">
-            <div className="input-group">
-                <div id="input-group-3" className="input-group-text">
-                Unit
-                </div>
-                <input
-                type="text"
-                className="form-control"
-                placeholder="Unit"
-                aria-describedby="input-group-3"
-                />
-            </div>
+    if (!result.isConfirmed) return;
 
-            <div className="input-group mt-2 sm:mt-0">
-                <div id="input-group-4" className="input-group-text">
-                Wholesale
-                </div>
-                <input
-                type="text"
-                className="form-control"
-                placeholder="Wholesale"
-                aria-describedby="input-group-4"
-                />
-            </div>
+    try {
+      await userDeleteAdmin(id);
+      toast.success("Xoá người dùng thành công");
+      fetchUsers();
+    } catch (err) {
+      toast.error("Xoá thất bại");
+      console.error(err);
+    }
+  };
 
-            <div className="input-group mt-2 sm:mt-0">
-                <div id="input-group-5" className="input-group-text">
-                Bulk
-                </div>
-                <input
-                type="text"
-                className="form-control"
-                placeholder="Bulk"
-                aria-describedby="input-group-5"
-                />
-            </div>
-            </div>
+  return (
+    <div className="grid grid-cols-12 gap-6 mt-5">
+      {/* Header & Toolbar */}
+      <div className="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
+        <button className="btn btn-primary shadow-md mr-2">Add New User</button>
+        <div className="dropdown">
+          <button className="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
+            <span className="w-5 h-5 flex items-center justify-center">
+              <Plus className="w-4 h-4" />
+            </span>
+          </button>
+          <div className="dropdown-menu w-40">
+            <ul className="dropdown-content">
+              <li><a href="#" className="dropdown-item"><Printer className="w-4 h-4 mr-2" /> Print</a></li>
+              <li><a href="#" className="dropdown-item"><FileText className="w-4 h-4 mr-2"/> Export to Excel</a></li>
+              <li><a href="#" className="dropdown-item"><FileText className="w-4 h-4 mr-2"/> Export to PDF</a></li>
+            </ul>
+          </div>
         </div>
+        <div className="hidden md:block mx-auto text-slate-500">Showing {users.length} entries</div>
+        <div className="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
+          <div className="w-56 relative text-slate-500">
+            <input type="text" className="form-control w-56 box pr-10" placeholder="Search..." />
+            <Search className="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" />
+          </div>
+        </div>
+      </div>
 
-        {/* Active Status */}
-        <div className="mt-3">
-            <label className="form-label">Active Status</label>
-            <div className="form-switch mt-2">
-            <input type="checkbox" className="form-check-input" />
-            </div>
-        </div>
+      {/* Table */}
+      <div className="intro-y col-span-12 overflow-auto lg:overflow-visible">
+        <table className="table table-report -mt-2">
+          <thead>
+            <tr>
+              <th className="whitespace-nowrap">IMAGE</th>
+              <th className="whitespace-nowrap">FULL NAME</th>
+              <th className="text-center whitespace-nowrap">PHONE</th>
+              <th className="text-center whitespace-nowrap">EMAIL</th>
+              <th className="text-center whitespace-nowrap">ROLES</th>
+              <th className="text-center whitespace-nowrap">STATUS</th>
+              <th className="text-center whitespace-nowrap">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id} className="intro-x">
+                <td className="w-40">
+                  <div className="w-10 h-10 image-fit zoom-in">
+                    <img
+                      alt={user.fullname}
+                      className="tooltip rounded-full"
+                      src="dist/images/preview-15.jpg"
+                      title={`Uploaded at ${user.created_at}`}
+                    />
+                  </div>
+                </td>
+                <td>
+                  <a href="#" className="font-medium whitespace-nowrap">{user.fullname}</a>
+                </td>
+                <td className="text-center">{user.phone || "—"}</td>
+                <td className="text-center">{user.email}</td>
+                <td className="text-center">{user.role_name}</td>
+                <td className="w-40">
+                  <div className={`flex items-center justify-center ${user.status === "active" ? "text-success" : "text-danger"}`}>
+                    <CheckSquare className="w-4 h-4 mr-2" />
+                    {user.status}
+                  </div>
+                </td>
+                <td className="table-report__action w-56">
+                  <div className="flex justify-center items-center">
+                    <a 
+                      className="flex items-center mr-3" 
+                      href="#"
+                      onClick={()=>handleEdit(user.id)}
+                    >
+                       <CheckSquare className="w-4 h-4 mr-1" /> Edit
+                    </a>
+                    <a
+                      className="flex items-center text-danger"
+                      href="#"
+                      onClick={() => handleDelete(user.id)}
+                    >
+                      <Trash2 className="w-4 h-4 mr-1" /> Delete
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-        {/* Description */}
-        <div className="mt-3">
-            <label className="form-label">Description</label>
-            <div className="mt-2">
-            <div className="editor border rounded-md p-3 bg-gray-50 min-h-[100px]">
-                <p>Content of the editor.</p>
-            </div>
-            </div>
-        </div>
-
-        {/* Buttons */}
-        <div className="text-right mt-5">
-            <button
-            type="button"
-            className="btn btn-outline-secondary w-24 mr-1"
-            >
-            Cancel
-            </button>
-            <button type="button" className="btn btn-primary w-24">
-            Save
-            </button>
-        </div>
-        </div>
-    );
+      {/* Pagination */}
+      <div className="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
+        <nav className="w-full sm:w-auto sm:mr-auto">
+          <ul className="pagination">
+            <li className="page-item"><a className="page-link" href="#"><i className="w-4 h-4" data-lucide="chevrons-left"></i></a></li>
+            <li className="page-item"><a className="page-link" href="#"><i className="w-4 h-4" data-lucide="chevron-left"></i></a></li>
+            <li className="page-item"><a className="page-link" href="#">1</a></li>
+            <li className="page-item active"><a className="page-link" href="#">2</a></li>
+            <li className="page-item"><a className="page-link" href="#">3</a></li>
+            <li className="page-item"><a className="page-link" href="#"><i className="w-4 h-4" data-lucide="chevron-right"></i></a></li>
+            <li className="page-item"><a className="page-link" href="#"><i className="w-4 h-4" data-lucide="chevrons-right"></i></a></li>
+          </ul>
+        </nav>
+        <select className="w-20 form-select box mt-3 sm:mt-0">
+          <option>10</option>
+          <option>25</option>
+          <option>50</option>
+        </select>
+      </div>
+    </div>
+  );
 }

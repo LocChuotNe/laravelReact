@@ -24,7 +24,7 @@ class AdminAuthController extends Controller
 
         return response()->json([
             'user' => $user,
-            'role' => $user->role->name ?? 'null || editor || viewer'
+            'role' => $user->role->name ?? 'null || viewer'
         ]);
     }
 
