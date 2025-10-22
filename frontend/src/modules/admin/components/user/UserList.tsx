@@ -1,19 +1,28 @@
 import { useEffect, useState } from "react";
 import { userListAdmin, userDeleteAdmin } from "../../../../api/index";
+import PaginationNav from "../../../../components/shared/PaginationNav";
+import SearchComponent from "../../../../components/shared/SearchComponent";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import 'sweetalert2/dist/sweetalert2.min.css';
-import { Trash2, CheckSquare, Search, Printer, FileText, Plus } from 'lucide-react';
+import { Trash2, CheckSquare, Printer, FileText, Plus } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 
 export default function UserList() {
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 2;
+
+  const totalPages = Math.ceil(filteredUsers.length / pageSize);
+  const paginatedUsers = filteredUsers.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const fetchUsers = async () => {
     try {
-      const res = await userListAdmin()
-      const filteredUsers = res.data.filter((user) => user.role_name !== 'admin');
-      setUsers(filteredUsers);
+      const res = await userListAdmin();
+      const filtered = res.data.filter((user) => user.role_name !== 'admin');
+      setUsers(filtered);
+      setFilteredUsers(filtered);
     } catch {
       toast.error("Không thể tải danh sách người dùng");
     }
@@ -22,20 +31,27 @@ export default function UserList() {
   useEffect(() => {
     fetchUsers();
   }, []);
-  
+
   const navigate = useNavigate();
-  const handleEdit = (id:Number) =>{
-    navigate(`/admin/user/edit/${id}`);
-  }
+
+  const handleEdit = (id: number) => {
+    navigate(`/admin/user/edit/${id}`, {
+      state: { cancelPath: "/admin/users" }
+    });
+  };
+
+  const handleCreate = () => {
+    navigate(`/admin/user/create`);
+  };
 
   const handleDelete = async (id: number) => {
     const result = await Swal.fire({
-        title: "Bạn có chắc muốn xoá?",
-        text: "Hành động này không thể hoàn tác.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Xoá",
-        cancelButtonText: "Huỷ",
+      title: "Bạn có chắc muốn xoá?",
+      text: "Hành động này không thể hoàn tác.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Xoá",
+      cancelButtonText: "Huỷ",
     });
 
     if (!result.isConfirmed) return;
@@ -54,7 +70,7 @@ export default function UserList() {
     <div className="grid grid-cols-12 gap-6 mt-5">
       {/* Header & Toolbar */}
       <div className="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-        <button className="btn btn-primary shadow-md mr-2">Add New User</button>
+        <button className="btn btn-primary shadow-md mr-2" onClick={handleCreate}>Add New User</button>
         <div className="dropdown">
           <button className="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
             <span className="w-5 h-5 flex items-center justify-center">
@@ -69,12 +85,13 @@ export default function UserList() {
             </ul>
           </div>
         </div>
-        <div className="hidden md:block mx-auto text-slate-500">Showing {users.length} entries</div>
+        <div className="hidden md:block mx-auto text-slate-500">Showing {filteredUsers.length} entries</div>
         <div className="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
-          <div className="w-56 relative text-slate-500">
-            <input type="text" className="form-control w-56 box pr-10" placeholder="Search..." />
-            <Search className="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" />
-          </div>
+          <SearchComponent
+            data={users}
+            searchFields={['fullname', 'email']}
+            onFiltered={setFilteredUsers}
+          />
         </div>
       </div>
 
@@ -93,7 +110,7 @@ export default function UserList() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {paginatedUsers.map((user) => (
               <tr key={user.id} className="intro-x">
                 <td className="w-40">
                   <div className="w-10 h-10 image-fit zoom-in">
@@ -122,9 +139,9 @@ export default function UserList() {
                     <a 
                       className="flex items-center mr-3" 
                       href="#"
-                      onClick={()=>handleEdit(user.id)}
+                      onClick={() => handleEdit(user.id)}
                     >
-                       <CheckSquare className="w-4 h-4 mr-1" /> Edit
+                      <CheckSquare className="w-4 h-4 mr-1" /> Edit
                     </a>
                     <a
                       className="flex items-center text-danger"
@@ -141,25 +158,12 @@ export default function UserList() {
         </table>
       </div>
 
-      {/* Pagination */}
-      <div className="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
-        <nav className="w-full sm:w-auto sm:mr-auto">
-          <ul className="pagination">
-            <li className="page-item"><a className="page-link" href="#"><i className="w-4 h-4" data-lucide="chevrons-left"></i></a></li>
-            <li className="page-item"><a className="page-link" href="#"><i className="w-4 h-4" data-lucide="chevron-left"></i></a></li>
-            <li className="page-item"><a className="page-link" href="#">1</a></li>
-            <li className="page-item active"><a className="page-link" href="#">2</a></li>
-            <li className="page-item"><a className="page-link" href="#">3</a></li>
-            <li className="page-item"><a className="page-link" href="#"><i className="w-4 h-4" data-lucide="chevron-right"></i></a></li>
-            <li className="page-item"><a className="page-link" href="#"><i className="w-4 h-4" data-lucide="chevrons-right"></i></a></li>
-          </ul>
-        </nav>
-        <select className="w-20 form-select box mt-3 sm:mt-0">
-          <option>10</option>
-          <option>25</option>
-          <option>50</option>
-        </select>
-      </div>
+      <PaginationNav
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+        pageSize={pageSize}
+      />
     </div>
   );
 }

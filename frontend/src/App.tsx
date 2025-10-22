@@ -8,6 +8,7 @@ import Welcome from './modules/admin/pages/Welcome.tsx'
 import UserList from "./modules/admin/components/user/UserList.tsx";
 import UserGroups from "./modules/admin/components/user/UserGroups.tsx";
 import EditUser from "./modules/admin/components/user/EditUser.tsx";
+import CreateUser from "./modules/admin/components/user/CreateUser";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -36,6 +37,7 @@ function App() {
           <Route path="admin" element={<Welcome />} />
           <Route path="users" element={<UserList />} />
           <Route path="/admin/user/edit/:id" element={<EditUser />} />
+          <Route path="/admin/user/create" element={<CreateUser />} />
           <Route path="groups" element={<UserGroups />} />
         </Route>
       </Routes>

@@ -1,7 +1,8 @@
 import { Search } from "lucide-react";
+import { useState } from "react";
 
-export default function SeachBody() {
-    
+export default function SeachBody({data}) {
+
     return (
         <div className="intro-x relative mr-3 sm:mr-6">
             <div className="search hidden sm:block">

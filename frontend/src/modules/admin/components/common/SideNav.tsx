@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
+import {Users, User } from "lucide-react";
 
 export default function SideNav() {
   const navigate = useNavigate();
@@ -24,26 +25,26 @@ export default function SideNav() {
       <ul>
         <li>
             <a href="#" onClick={toggleUserMenu} className="side-menu side-menu--active">
-                <div className="side-menu__icon"><i data-lucide="shopping-bag"></i></div>
+                <div className="side-menu__icon"><Users className="w-5 h-5 text-slate-500 text-[#1e40af]" /></div>
                 <div className="side-menu__title">
                 Quản lý User
                 <div className="side-menu__sub-icon transform rotate-180">
-                    <i data-lucide="chevron-down"></i>
+                    <Users className="w-5 h-5 text-slate-500 text-[#1e40af]" />
                 </div>
                 </div>
             </a>
 
           {isUserMenuOpen && (
-            <ul className="side-menu__sub-open">
+            <ul  className="side-menu__sub-open">
               <li>
                 <NavLink to="/admin/groups" className="side-menu">
-                  <div className="side-menu__icon"><i data-lucide="zap"></i></div>
+                  <div className="side-menu__icon"><User className="w-5 h-5 text-slate-500 text-white" /></div>
                   <div className="side-menu__title">Quản lý Tài Khoản Admin</div>
                 </NavLink>
               </li>
               <li>
                 <NavLink to="/admin/users" className="side-menu">
-                  <div className="side-menu__icon"><i data-lucide="zap"></i></div>
+                  <div className="side-menu__icon"><User className="w-5 h-5 text-slate-500 text-white" /></div>
                   <div className="side-menu__title">Quản lý Tài Khoản User</div>
                 </NavLink>
               </li>
