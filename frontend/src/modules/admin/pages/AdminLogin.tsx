@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/auth/LoginForm";
 import { loginAdmin } from "../../../api/admin";
 import LoginInfo from "../../../modules/admin/components/auth/LoginInfo"
-
+import { toast } from "react-toastify";
 export default function AdminLogin() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState<string[]>([]);
@@ -18,9 +18,13 @@ export default function AdminLogin() {
     e.preventDefault();
     try {
       const res = await loginAdmin(formData);
+      toast.success('abc');
       localStorage.setItem("auth_token", res.token);
       localStorage.setItem("auth_role", "admin");
       navigate("/admin");
+
+      localStorage.setItem("auth_user", JSON.stringify(res.user));
+      localStorage.setItem("auth_token", res.token);
     } catch (err: any) {
       const res = await err.response?.json?.();
       const message = res?.error || "Đăng nhập thất bại";

@@ -30,7 +30,7 @@ export default function Notifycation() {
                 aria-expanded="false"
                 data-tw-toggle="dropdown"
                 >
-                <Bell className="notification__icon dark:text-slate-500" />
+                    <Bell className="notification__icon w-5 h-5 dark:text-slate-500" />
                 </div>
                 <div className="notification-content pt-2 dropdown-menu">
                 <div className="notification-content__box dropdown-content">

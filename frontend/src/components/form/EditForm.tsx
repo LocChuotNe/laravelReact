@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate  } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function EditForm({ initialData, onSubmit, fields }: Props) {
   const [formData, setFormData] = useState(initialData || {});
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setFormData(initialData || {});
@@ -26,6 +28,10 @@ export default function EditForm({ initialData, onSubmit, fields }: Props) {
       setLoading(false);
     }
   };
+
+  const handleCancel = () =>{
+    navigate('/admin/users');
+  }
 
   return (
     <div className="intro-y box p-5">
@@ -58,7 +64,11 @@ export default function EditForm({ initialData, onSubmit, fields }: Props) {
       ))}
 
       <div className="text-right mt-5">
-        <button type="button" className="btn btn-outline-secondary mr-2">
+        <button 
+          type="button" 
+          className="btn btn-outline-secondary mr-2"
+          onClick={handleCancel}
+        >
           Huỷ
         </button>
         <button
